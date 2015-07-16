@@ -1,6 +1,7 @@
 <?php 
-$B=10; 
-$A = 7; 
+for($A=1; $A<31; $++) { 
 print $A; 
+print ' MARK<BR \>'; 
+ } 
  
  ?> 

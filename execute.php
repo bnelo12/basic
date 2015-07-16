@@ -132,7 +132,7 @@ class executeCode extends dataBaseConnect {
 		$limitVar = "";
 		if(!is_numeric($subAttribute[1])) 
 			$limitVar="$".str_replace(" ", "", $subAttribute[1])."+"; 
-		$stringData = "for(\$".$variable[0]."=".($subAttribute[0])."; \$".$variable[0]."<".$limitVar.($subAttribute[1]+1)."; \$".$vaiable[0]."++) { \n";
+		$stringData = "for(\$".$variable[0]."=".($subAttribute[0])."; \$".$variable[0]."<".$limitVar.($subAttribute[1]+1)."; \$".$variable[0]."++) { \n";
 	    return $stringData;
 	}
 	
