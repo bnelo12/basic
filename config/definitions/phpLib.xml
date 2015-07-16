@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<libFunctions>b
+<function>
+	<name>DB Connection</name>
+	<type>php</type>
+	<description>DB connection facilitator</description>
+	<path>dataBase/connect.php</path>
+</function>
+<function>
+	<name>DB credentials</name>
+	<type>php</type>
+	<description>DB credentials</description>
+	<path>dataBase/credentials.php</path>
+</function>
+<function>
+	<name>Set results for DB</name>
+	<type>php</type>
+	<description>Set results</description>
+	<path>dataBase/resultSet.php</path>
+</function>
+<function>
+	<name>Code Line and List Management</name>
+	<type>php</type>
+	<description>Set results</description>
+	<path>line.php</path>
+</function>
+<function>
+	<name>Code execution RUN!</name>
+	<type>php</type>
+	<description>Set results</description>
+	<path>execute.php</path>
+</function>
+<function>
+	<name>User Management</name>
+	<type>php</type>
+	<description>User Management</description>
+	<path>user.php</path>
+</function>
+<function>
+	<name>File Management</name>
+	<type>php</type>
+	<description>FileManagement</description>
+	<path>file.php</path>
+</function>
+</libFunctions> 
+

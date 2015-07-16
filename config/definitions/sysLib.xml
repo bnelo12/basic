@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<libLocations>
+
+<location>
+	<name>PHP Library index</name>
+	<type>php</type>
+	<description>Location of xml file of all PHP files required</description>
+	<xmlPath>config/definitions/phpLib.xml</xmlPath>
+</location>
+
+</libLocations> 
+
+

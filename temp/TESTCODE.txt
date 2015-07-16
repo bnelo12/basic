@@ -1,0 +1,78 @@
+10 REM -------------------------------------
+20 REM *********** Variable Test ***********
+30 REM -------------------------------------
+40 LET A$="MARK"
+50 LET PI = 3.14
+60 LET B=4
+70 LET ALPHA = SIN(2*PI)
+80 LET C= 4/2
+90 PRINT A$;" Elo <BR \>";B;" ";PI;"<BR \>"
+100 FOR D=1TO100
+110 LET C=C+1
+120 PRINT C+1
+130 NEXT D
+140 LET ab=4
+150 LET ba=8
+160 LET cc=ab*ba
+170 PRINT "<BR \>";cc
+180 PRINT "<br \>"
+190 REM -------------------------------------
+200 REM ********* Nested Loop Test **********
+210 REM -------------------------------------
+220 REM Nested loop test
+230 FOR A = 1 To 10
+240 FOR B = 1 TO 12
+250 PRINT A;" x ";B;" = ";A*B
+260 PRINT "<BR \>"
+270 NEXT B
+280 PRINT "<BR \>"
+290 NEXT A
+300 REM -------------------------------------
+310 REM ********** Graphics Test ************
+320 REM -------------------------------------
+330 GRAPHBEGIN 300,600
+340 LET A=0
+350 LINE A,A,300,A
+360 LINE 0,0,0,600
+370 FOR X = 1 TO 300
+380 LET Y=250*SIN(2*PI*X/300)
+390 LINE X,300+Y,X+1,300+Y
+400 NEXT X
+410 LINE 0,600,300,600
+420 LINE 300,0,300,600
+430 GRAPHEND 
+440 REM -------------------------------------
+450 REM *********** Array Test **************
+460 REM -------------------------------------
+470 DIM arrayVal$(2)
+480 DIM arrayNum(10)
+490 FOR A=1TO10
+500 LET arrayNum[A]=A*2
+510 LET arrayVal$[A]="MARK ELO <BR \>"
+520 PRINT "<BR \>";arrayVal$[A];" "
+530 PRINT "<br \>Array Output = ";arrayNum[A]
+540 NEXT A
+550 PRINT "<BR \>"
+560 DIM Y(300)
+570 FOR X = 1 TO 300
+580 LET freq=75
+590 LET Y[X]=250*SIN(2*PI*X/freq)
+600 NEXT X
+610 GRAPHBEGIN 600,600
+620 LINE 0,300,600,300
+630 LINE 0,0,0,600
+640 FOR cycle = 0 to 1
+650 FOR X = 1 TO 300
+660 LINE X+(cycle*300),300+Y[X],(X+1)+(cycle*300),300+Y[X]
+670 NEXT X
+680 NEXT cycle
+690 GRAPHEND 
+700 LET sampleRate = 44100
+710 LET toneFreq = 500
+720 LET omega = 2 * PI * toneFreq / sampleRate
+730 LET duration = 2
+740 LET sampleNum = sampleRate * duration
+750 FOR X = 0 to sampleNum
+760 LET wave[X] = SIN(X*omega)
+770 NEXT X
+780 END 
