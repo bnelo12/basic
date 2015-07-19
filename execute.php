@@ -44,82 +44,79 @@ class executeCode extends dataBaseConnect {
 		$strsql = "SELECT * FROM codelines WHERE userNum = ".$this->userNum." AND fileNum = ".$this->fileId." ORDER BY lineNum ASC";
 		$rs=$this->con->createResultSet($strsql, $this->getDataBaseName());
 		// This is the main code loop
-		$repeat=1;
-		$myFile = "executionFile.php";
-		$fh = fopen($myFile, 'w') or die("can't open file");
+		$outFile = $this->userNum."-output.php";
+		$fh = fopen($outFile, 'w') or die("can't open file");
 		$stringData = "<?php \n";
 		fwrite($fh, $stringData);
 		while($row = $rs->getRow()){
-			switch($row['lineCmd'])
-			{
-				case 'REM':
-					break;
-				case 'FOR':
-				    $stringData = $this->processFor($row['lineAttribute']);
-					fwrite($fh, $stringData);
-					break;
-				case 'NEXT':
-					$stringData = " } \n";
-		            fwrite($fh, $stringData);
-					break;
-				case 'IF':
-					$stringData = $this->processIf($row['lineAttribute']);
-					$stringData = htmlspecialchars_decode($stringData);
-		            fwrite($fh, $stringData);
-					break;
-				case 'PRINT':
-				    $stringData = $this->processPrint($row['lineAttribute']);
-					$stringData = htmlspecialchars_decode($stringData);
-		            fwrite($fh, $stringData);
-					break;
-				case 'LET':
-				    $stringData = $this->processLet($row['lineAttribute']);
-					$stringData = htmlspecialchars_decode($stringData);
-		            fwrite($fh, $stringData);
-					break;
-				case 'DIM':
-				    $stringData = $this->processDim($row['lineAttribute']);
-					$stringData = htmlspecialchars_decode($stringData);
-		            fwrite($fh, $stringData);
-					break;
-				case 'GRAPHBEGIN':
-				    $stringData = $this->processGraphBegin($row['lineAttribute']);
-		            fwrite($fh, $stringData);
-					break;
-				case 'GRAPHEND':
-				    $stringData = $this->processGraphEnd();
-		            fwrite($fh, $stringData);
-					break;
-				case 'LINE':
-				    $stringData = $this->processLine($row['lineAttribute']);
-		            fwrite($fh, $stringData);
-					break;
-				case 'POLYGON':
-				    $stringData = $this->processPoly($row['lineAttribute']);
-		            fwrite($fh, $stringData);
-					break;
-				case 'PAUSE':
-				    $stringData = "sleep(".$row['lineAttribute'].");";
-		            fwrite($fh, $stringData);
-					break;
-				case 'END':
-					print "<br \>";
-					$stringData = " \n ?> ";
-					fwrite($fh, $stringData);
-					fclose($fh);
-					include($myFile);
-					print "<br \>";
-					
-					break;
-				default:
-					print "Syntax Error on line ".$row['lineNum']."<br \>";
-					fclose($fh);
-					exit();
-			}
-		
+		    $command = $row['lineCmd'];
+			$attribute = $row['lineAttribute'];
+			$stringData = $this->processCommand($command, $attribute);
+			fwrite($fh, $stringData);
 		}
+		fclose($fh);
+		include($outFile);
+		print "<br \>";
 		return 1;
     } 
+	
+	function processCommand($command, $attribute) {
+		switch($command)
+		{
+			case 'REM':
+				break;
+			case 'FOR':
+				$stringData = $this->processFor($attribute);
+				break;
+			case 'NEXT':
+				$stringData = " } \n";
+				break;
+			case 'IF':
+				$stringData = $this->processIf($attribute);
+				$stringData = htmlspecialchars_decode($stringData);
+				break;
+			case 'ELSE':
+				$stringData = " } else { \n";
+				break;
+			case 'ENDIF':
+				$stringData = " } \n";
+				break;
+			case 'PRINT':
+				$stringData = $this->processPrint($attribute);
+				$stringData = htmlspecialchars_decode($stringData);
+				break;
+			case 'LET':
+				$stringData = $this->processLet($attribute);
+				$stringData = htmlspecialchars_decode($stringData);
+				break;
+			case 'DIM':
+				$stringData = $this->processDim($attribute);
+				$stringData = htmlspecialchars_decode($stringData);
+				break;
+			case 'GRAPHBEGIN':
+				$stringData = $this->processGraphBegin($attribute);
+				break;
+			case 'GRAPHEND':
+				$stringData = $this->processGraphEnd();
+				break;
+			case 'LINE':
+				$stringData = $this->processLine($attribute);
+				break;
+			case 'POLYGON':
+				$stringData = $this->processPoly($attribute);
+				break;
+			case 'PAUSE':
+				$stringData = "sleep(".$attribute.");";
+				break;
+			case 'END':
+				print "<br \>";
+				$stringData = " \n ?> ";
+				break;
+			default:
+				print "Syntax Error on line ".$row['lineNum']."<br \>";;
+		}
+	return $stringData;
+	}
 	
 	function processFor($attribute) {
 		//$attribute = strtoupper($attribute);
@@ -138,48 +135,117 @@ class executeCode extends dataBaseConnect {
 	
 	function processIf($attribute) {
 		$type = "";
+		//print "--> ".$this->get_string_between($attribute, '"', '"')."<br>";
+		preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $attribute, $matches);
+		//print "<BR>".print_r($matches);
+		//print "<BR>-->".$matches[0][0]." ".$matches[0][1]." ".$matches[0][2]." ".$matches[0][3];
+		/*
+		for($n=0; $n<sizeof($matches[0]); $n++) {
+			print "<BR>-->".$matches[0][$n]; 
+			}
+		print "<BR>DONE"; */
 	    $variable = (explode("THEN",$attribute));
 		$variable[0] = $this->removeDummyChars($variable[0]);
-		if(preg_match('/!=/', $variable[0])) {
+		if(preg_match('/!=/', $variable[0])) { 
 			$type="NOTEQALTO"; $args = (explode("!=",$variable[0])); }
-			elseif(preg_match('/&lt;&gt;/', $variable[0])){
+			elseif(preg_match('/&lt;&gt;/', $variable[0])){ 
 				$type="NOTEQALTO"; $args = (explode("&lt;&gt;",$variable[0])); }
-				elseif(preg_match('/&lt;/', $variable[0])) {
-					$type="LESSTHAN"; $args = (explode("&lt;",$variable[0])); }
-					elseif(preg_match('/&gt;/', $variable[0])) {
-						$type="GREATERTHAN"; $args = (explode("&gt;",$variable[0])); }
-						elseif(preg_match('/=/', $variable[0])) {
-							$type="EQUALTO"; $args = (explode("=",$variable[0])); }
-		
+				elseif(preg_match('/&lt;=/', $variable[0])) { 
+					$type="LESSTHANEQAL"; $args = (explode("&lt;=",$variable[0])); }
+					elseif(preg_match('/&gt;=/', $variable[0])) { 
+						$type="GREATERTHANEQUAL"; $args = (explode("&gt;=",$variable[0])); }
+						elseif(preg_match('/&gt;/', $variable[0])) { 
+							$type="GREATERTHAN"; $args = (explode("&gt;",$variable[0])); }
+							elseif(preg_match('/&lt;/', $variable[0])) { 
+								$type="LESSTHAN"; $args = (explode("&lt;",$variable[0])); }
+								elseif(preg_match('/=/', $variable[0])) { 
+									$type="EQUALTO"; $args = (explode("=",$variable[0])); }
+
 		for($n=0; $n<2; $n++) {
 			$args[$n] = trim($args[$n]); 
-
-			
-			$args[0] = str_replace("$", "", $args[0]);
-			$args[1] = str_replace("$", "", $args[1]); 
-		
-			if(is_numeric($args[$n]) || preg_match('/"/', $args[$n])) 
-				$args[$n] = $args[$n]; 
-			else
-				$args[$n] = "$".$args[$n]; 
+	        if(preg_match('/\$/',  $args[$n])) {
+			    $args[$n] = str_replace("$", "", $args[$n]);
+				$isItArrayString = $this->get_string_between($args[$n], "[", "]");
+				if($isItArrayString) { 
+					$args[$n] = str_replace($isItArrayString."]", "", $args[$n]);
+					$args[$n] = "$".str_replace("[", "THISISCHAR[$".$isItArrayString."]", $args[$n]);
+					}
+				else
+					$args[$n] = "$".$args[$n]."THISISCHAR"; 
+		    } else {
+				if(is_numeric($args[$n]) || preg_match('/"/', $args[$n])) 
+					$args[$n] = $args[$n]; 
+				else {
+				    $isItArrayString = $this->get_string_between($args[$n], "[", "]");
+					if($isItArrayString) { 
+						$args[$n] = str_replace($isItArrayString."]", "", $args[$n]);
+						$args[$n] = str_replace("[", "[$".$isItArrayString."]", $args[$n]);
+						}
+					$args[$n] = "$".$args[$n]; 
+				}
+			}
 		}
-			
+        
+		//print "VAR1 -->".$variable[1]."<br>";
+        if(preg_match('/ELSE/', $variable[1])) 
+			$action = explode("ELSE",trim($variable[1]), 2);
+		else
+			$action[0]=$variable[1];
 		
-		//if(!preg_match('/"/', $args[1])) { // if not quotes
-		print "CONDITION is ".$args[0]." ".$type." ".$args[1]."<br>";
+		$subCommandAttribute = explode(" ",trim($action[0]), 2);
+		switch($type) {
+			case 'EQUALTO':
+				$text = "if(".$args[0]."==".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+			case 'NOTEQALTO':
+				$text = "if(".$args[0]."!=".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+			case 'GREATERTHAN':
+				$text = "if(".$args[0].">".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+			case 'LESSTHAN':
+				$text = "if(".$args[0]."<".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+			case 'GREATERTHANEQUAL':
+				$text = "if(".$args[0].">=".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+			case 'LESSTHANEQAL':
+				$text = "if(".$args[0]."<=".$args[1].") { \n";
+				if($variable[1]) {
+					$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+					$text .= "}\n";
+					}
+				break;
+		}
 		
-		
-		//$attribute = strtoupper($attribute);
-		/*
-		$variable = (explode("=",$attribute));
-		$subAttribute = (explode("TO",$variable[1]));
-		$attributeLetElement[0] = str_replace(" ", "", $attributeLetElement[0]);
-		$limitVar = "";
-		if(!is_numeric($subAttribute[1])) 
-			$limitVar="$".str_replace(" ", "", $subAttribute[1])."+"; 
-		$stringData = "for(\$".$variable[0]."=".($subAttribute[0])."; \$".$variable[0]."<".$limitVar.($subAttribute[1]+1)."; \$".$variable[0]."++) { \n"; */
-		// print "Found if - ".$variable[0]." --> ".$variable[1]."<br>";
-	    return $stringData;
+		if($action[1]) {
+			$subCommandAttribute = explode(" ",trim($action[1]), 2);
+		    $text .= "else {";
+			$text .= $this->processCommand($subCommandAttribute[0], $subCommandAttribute[1]);
+			$text .= "}\n";
+			}
+
+	    return $text;
 	}
 	
 	function processPrint($attribute) {
