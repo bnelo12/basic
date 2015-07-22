@@ -65,6 +65,7 @@ if (!empty($_POST['input']))
 		exit();
 	} else {
 		$cmd = $line[0];
+		$cmd = stripslashes($cmd); //Stop script insertion
 		unset($line[0]);
 		$cmd = strtoupper($cmd);
 		$attribute = implode(" ", $line);
@@ -126,6 +127,13 @@ if (!empty($_POST['input']))
 				break;
 			case 'WHOAMI':
 				print "You are ".$_SESSION['login_user']."<br \>";
+				break;	
+			case 'CHANGEPW':
+				$attribute = str_replace(" ", "", $attribute);
+				$attributes = explode(",", $attribute);
+				$userMan = new userMan ( $userNum, $fileId );
+				$userMan->changePW($attributes);
+				$userMan->closeDb();
 				break;	
 			case 'LOGOUT':
 				session_destroy();

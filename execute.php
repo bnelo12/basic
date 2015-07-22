@@ -317,6 +317,7 @@ class executeCode extends dataBaseConnect {
 		$numElements = sizeof($attributeElement);
 		
 		for($i=0; $i<$numElements; $i++) { 
+		    //print $attributeElement[$i].$i."<BR>";
 		    $lineAtt="";
 			if(preg_match('/"/', $attributeElement[$i])) { // if quotes
 			    switch($function) {
