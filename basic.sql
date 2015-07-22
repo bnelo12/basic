@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generation Time: Jul 15, 2015 at 09:36 PM
+-- Generation Time: Jul 22, 2015 at 01:59 PM
 -- Server version: 5.0.22
 -- PHP Version: 5.1.4
 -- 
@@ -26,7 +26,7 @@ CREATE TABLE `codelines` (
   `timeDateStamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `lineTemp` int(1) NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=399 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=545 ;
 
 -- --------------------------------------------------------
 
@@ -41,7 +41,7 @@ CREATE TABLE `filesmanager` (
   `userNum` int(1) NOT NULL,
   `timeDateStamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=31 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=33 ;
 
 -- --------------------------------------------------------
 
@@ -55,5 +55,6 @@ CREATE TABLE `users` (
   `passWord` varchar(80) NOT NULL default '',
   `eMail` varchar(80) NOT NULL,
   `level` varchar(80) NOT NULL default '',
+  `salt` char(16) character set utf8 collate utf8_unicode_ci NOT NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
