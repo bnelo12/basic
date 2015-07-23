@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<title>BASIC - PHP Server BASIC</title>
+<title>BASIC - Server BASIC</title>
 <style type="text/css">
 body {
 	margin: 0;
@@ -20,7 +20,7 @@ body {
 
 <script type="text/javascript">
 $('#terminal_container').height($(document).height());
-$('#terminal_container').terminal('server.php', {custom_prompt : "&gt; ", hello_message : 'PHP Server Basic <br \>Ready'});
+$('#terminal_container').terminal('server.php', {custom_prompt : "&gt; ", hello_message : 'Server BASIC <br \>Ready'});
 </script>			
 </body>
 </html>

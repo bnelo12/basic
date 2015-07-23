@@ -1,26 +1,14 @@
 <?php 
-$wave = array(); 
-$PI=3.14; 
-$sampleRate = 44100; 
-$toneFreq = 500; 
-$toneFreq2 = 1000; 
-$omega = 2 * $PI * $toneFreq / $sampleRate; 
-$omega2 = 2 * $PI * $toneFreq2 / $sampleRate; 
-$duration = 0.020; 
-print $omega; 
-print '<BR \>'; 
-$sampleNum = $sampleRate * $duration; 
-print $sampleNum; 
-print '<br \>'; 
-print '<svg height="600" width="900" >'; 
-for($X = 1 ; $X <$sampleNum+1; $X ++) { 
-$wave[$X] = 150 * ( SIN($X*$omega) + SIN($X*$omega2) ); 
-if($wave[$X]<0) { 
-$wave[$X] = ($wave[$X] * -1) + 300; 
- } else { 
-$wave[$X] = 300 - $wave[$X]; 
- } 
-print '<line x1="'.($X).'" y1="'.( $wave[$X]).'" x2="'.( $X+2).'" y2="'.( $wave[$X]).'" style="stroke:green;stroke-width:2" />'; 
+$PI = 3.14; 
+print '<svg height="600" width="300" >'; 
+$A=0; 
+print '<line x1="'.($A).'" y1="'.($A).'" x2="300" y2="'.($A).'" style="stroke:green;stroke-width:2" />'; 
+print '<line x1="0" y1="0" x2="0" y2="600" style="stroke:green;stroke-width:2" />'; 
+print '<line x1="0" y1="600" x2="300" y2="600" style="stroke:green;stroke-width:2" />'; 
+print '<line x1="300" y1="0" x2="300" y2="600" style="stroke:green;stroke-width:2" />'; 
+for($X = 1 ; $X <301; $X ++) { 
+$Y=250*SIN(2*$PI*$X/300); 
+print '<line x1="'.($X).'" y1="'.(300+$Y).'" x2="'.($X+1).'" y2="'.(300+$Y).'" style="stroke:green;stroke-width:2" />'; 
  } 
 print '</svg>'; 
  
