@@ -16,8 +16,8 @@
  */
 
 //LOAD Files required 
-$serverRoot = $_SERVER['DOCUMENT_ROOT'];
-$path = "/basic/config/control/main.php";
+//$serverRoot = $_SERVER['DOCUMENT_ROOT'];
+$path = "config/control/main.php";
 
 session_start();
 
@@ -42,8 +42,7 @@ if (!empty($_POST['input']))
 	if($st=='HELP' || $st=='help' || $st=='?') {
 	    include('help.php');
 		}
-		
-	$cmd = strtoupper($cmd);
+
 	$line = (explode(" ",$st));
 	$userMan = new userMan ( $userNum, $fileId );
 	$userNum = $userMan->getUserId($_SESSION['login_user'], $_SESSION['login_passWord']);

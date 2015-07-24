@@ -18,9 +18,7 @@
  * \brief Establish a reference to where BASIC is installed then call all files.
  */
 
-// This is where BASIC resides 
- 
-$basicIsAt = $_SERVER['DOCUMENT_ROOT']."/basic/";
+$basicIsAt = dirname( dirname( dirname(__FILE__) ) )."\\";
 
 // Define Global Def Path 
 if($globalsPath=="")
@@ -51,7 +49,7 @@ try {
 } catch (Exception $e) {
     if(DEBUG)print 'SYSTEM FAIL... Caught exception: '.  $e->getMessage(). "\n";	
 }
-	
+
 ?>
 
 

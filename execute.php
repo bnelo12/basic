@@ -422,6 +422,15 @@ class executeCode extends dataBaseConnect {
 		$len = strpos($string,$end,$ini) - $ini;
 		return substr($string,$ini,$len);
 	}
+	
+	/** 
+	* Close
+	*/
+	
+	function closeDb() {
+		$this->con = null;
+	}
+	
 }
 
 ?>
